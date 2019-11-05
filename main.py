@@ -53,20 +53,33 @@ def batch_generator(inputs, outputs, batch_size=1000):
 n1 = 16
 n2 = 10
 
-def random_weights():
+def generate_random_weights():
     global syn1
     syn1 = 2*np.random.random((28*28, n1))-1
     global syn2
     syn2 = 2*np.random.random((n1, n2))-1
 
+def load_weights():
+    global syn1
+    syn1 = np.load('syn1.npy')
+    global syn2
+    syn2 = np.load('syn2.npy')
 
-def forward(ins):
+def forward_propagate(ins):
     # 1000 x n1
     global a1 
     a1 = relu(np.dot(ins, syn1))
     # 1000 x n2
     global a2 
     a2 = relu(np.dot(a1, syn2))
+
+def print_results():
+    guesses = np.argmax(a2, axis=1)
+    print("guesses:")
+    print(guesses[range(100)])
+    print("actual values:")
+    print(test_labels[range(100)])
+    print("accuracy: {0}%".format(np.sum(guesses == test_labels)*100/10000))
 
 def train(epochs):
     global syn1
@@ -78,9 +91,9 @@ def train(epochs):
     z2 = 0
     for e in range(epochs):
         for i in range(60):
-            # forward propagation
+            # forward_propagate propagation
             ins, outs = next(gen)
-            forward(ins)
+            forward_propagate(ins)
         #   print("a2:")
         #   print(a2)
 
@@ -101,28 +114,14 @@ def train(epochs):
         #   print(z1)
             syn1 -= a * z1
         if e % 10 == 0:
-            forward(inputs)
+            forward_propagate(inputs)
             print("epoch {0} error:".format(e+300)) 
             print(np.sum(np.square(a2-outputs)))
             np.save('syn1.npy', syn1)
             np.save('syn2.npy', syn2)
 
-#random_weights()
-syn1 = np.load('syn1.npy')
-syn2 = np.load('syn2.npy')
+#generate_random_weights()
+load_weights()
 #train(1001)
-forward(test_inputs)
-guesses = np.argmax(a2, axis=1)
-print("guesses:")
-print(guesses[range(100)])
-print("actual values:")
-print(test_labels[range(100)])
-print("accuracy: {0}".format(np.sum(guesses == test_labels)*100/10000))
-"""
-import imageio
-im = 255-imageio.imread('four.png')[:,:,0]
-print(im)
-forward(im.flatten())
-print(a2)
-print(np.argmax(a2))
-"""
+forward_propagate(test_inputs)
+print_results()
