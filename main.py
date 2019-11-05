@@ -83,8 +83,8 @@ def print_results():
 def train(epochs):
     global syn1
     global syn2
-    a = 0.001
-    b = 0.5
+    a = 0.001 # gradient descent speed (alpha)
+    b = 0.5 # momentum scalar (beta)
     gen = batch_generator(inputs, outputs)
     z1 = 0
     z2 = 0
@@ -108,7 +108,7 @@ def train(epochs):
             syn1 -= a * z1
         if e % 10 == 0:
             forward_propagate(inputs)
-            print("epoch {0} error:".format(e+300)) 
+            print("epoch {0} error:".format(e))
             print(np.sum(np.square(a2-outputs)))
             np.save('syn1.npy', syn1)
             np.save('syn2.npy', syn2)
