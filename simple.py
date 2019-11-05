@@ -1,3 +1,9 @@
+"""
+A simple neural network used as a reference while writing main.py
+
+Taken from https://iamtrask.github.io/2015/07/12/basic-python-network/
+"""
+
 import numpy as np
 
 # sigmoid function
