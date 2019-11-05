@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import numpy as np
 import idx2numpy
-import cv2 as cv
 np.random.seed(1)
 np.set_printoptions(suppress=True)
 
@@ -94,8 +93,6 @@ def train(epochs):
             # forward_propagate propagation
             ins, outs = next(gen)
             forward_propagate(ins)
-        #   print("a2:")
-        #   print(a2)
 
             # backwards propagation
             # 1000 x n2
@@ -106,12 +103,8 @@ def train(epochs):
             a1_err = np.dot(a2_delta, syn2.T) 
             a1_delta = a1_err * relu(a1,True)
             z2 = b*z2 + np.dot(a1.T, a2_delta)
-        #   print("z2:")
-        #   print(z2)
             syn2 -= a * z2
             z1 = b*z1 + np.dot(ins.T, a1_delta)
-        #   print("z1:")
-        #   print(z1)
             syn1 -= a * z1
         if e % 10 == 0:
             forward_propagate(inputs)
